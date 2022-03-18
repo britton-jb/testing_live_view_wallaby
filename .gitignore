@@ -32,3 +32,5 @@ testing_live_view_wallaby-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Wallaby failure screenshots
+screenshots/

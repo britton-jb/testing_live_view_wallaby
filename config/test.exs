@@ -18,7 +18,17 @@ config :testing_live_view_wallaby, TestingLiveViewWallaby.Repo,
 config :testing_live_view_wallaby, TestingLiveViewWallabyWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
   secret_key_base: "YZJRcRqYdb9ChAFw+wuLQ2ArKyqYfosHKqg9AaoqDXlarAS8Ny7oSv3PrXwgdYq5",
-  server: false
+  server: true
+
+config :testing_live_view_wallaby, :sandbox, Ecto.Adapters.SQL.Sandbox
+
+config :wallaby,
+  otp_app: :testing_live_view_wallaby,
+  screenshot_on_failure: true,
+  chromedriver: [
+    path: "assets/node_modules/chromedriver/bin/chromedriver",
+    headless: false
+  ]
 
 # In test we don't send emails.
 config :testing_live_view_wallaby, TestingLiveViewWallaby.Mailer, adapter: Swoosh.Adapters.Test
