@@ -37,7 +37,7 @@ defmodule TestingLiveViewWallabyWeb.QuestionLive.Index do
   def handle_event("delete", %{"id" => id}, socket) do
     question = Questions.get_question!(id)
     {:ok, _} = Questions.delete_question(question)
-    question_deleted(question, socket)
+    {:noreply, socket}
   end
 
   @impl true
