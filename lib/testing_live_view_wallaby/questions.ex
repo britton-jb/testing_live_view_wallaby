@@ -53,6 +53,7 @@ defmodule TestingLiveViewWallaby.Questions do
     %Question{}
     |> Question.changeset(attrs)
     |> Repo.insert()
+    |> notify_subscribers(:question_created)
   end
 
   @doc """
@@ -71,6 +72,7 @@ defmodule TestingLiveViewWallaby.Questions do
     question
     |> Question.changeset(attrs)
     |> Repo.update()
+    |> notify_subscribers(:question_updated)
   end
 
   @doc """
@@ -86,7 +88,9 @@ defmodule TestingLiveViewWallaby.Questions do
 
   """
   def delete_question(%Question{} = question) do
-    Repo.delete(question)
+    question
+    |> Repo.delete()
+    |> notify_subscribers(:question_deleted)
   end
 
   @doc """
@@ -101,4 +105,18 @@ defmodule TestingLiveViewWallaby.Questions do
   def change_question(%Question{} = question, attrs \\ %{}) do
     Question.changeset(question, attrs)
   end
+
+  def subscribe, do: Phoenix.PubSub.subscribe(TestingLiveViewWallaby.PubSub, topic())
+  def subscribe(id), do: Phoenix.PubSub.subscribe(TestingLiveViewWallaby.PubSub, topic(id))
+
+  defp topic, do: "questions"
+  defp topic(id), do: "questions#{id}"
+
+  def notify_subscribers({:ok, %Question{id: id} = question}, event) do
+    Phoenix.PubSub.broadcast(TestingLiveViewWallaby.PubSub, topic(), {event, question})
+    Phoenix.PubSub.broadcast(TestingLiveViewWallaby.PubSub, topic(id), {event, question})
+    {:ok, question}
+  end
+
+  def notify_subscribers(result, _event), do: result
 end

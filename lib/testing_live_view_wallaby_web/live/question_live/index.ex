@@ -6,6 +6,7 @@ defmodule TestingLiveViewWallabyWeb.QuestionLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    Questions.subscribe()
     {:ok, assign(socket, :questions, list_questions())}
   end
 
@@ -36,11 +37,40 @@ defmodule TestingLiveViewWallabyWeb.QuestionLive.Index do
   def handle_event("delete", %{"id" => id}, socket) do
     question = Questions.get_question!(id)
     {:ok, _} = Questions.delete_question(question)
+    question_deleted(question, socket)
+  end
 
-    {:noreply, assign(socket, :questions, list_questions())}
+  @impl true
+  def handle_info({:question_created, question}, socket) do
+    appended_question_list = List.insert_at(socket.assigns.questions, -1, question)
+    {:noreply, assign(socket, :questions, appended_question_list)}
+  end
+
+  @impl true
+  def handle_info({:question_updated, updated_question}, socket) do
+    updated_question_list =
+      List.foldr(socket.assigns.questions, [], fn question, acc ->
+        if question.id == updated_question.id do
+          [updated_question | acc]
+        else
+          [question | acc]
+        end
+      end)
+
+    {:noreply, assign(socket, :questions, updated_question_list)}
+  end
+
+  @impl true
+  def handle_info({:question_deleted, question}, socket) do
+    question_deleted(question, socket)
   end
 
   defp list_questions do
     Questions.list_questions()
+  end
+
+  defp question_deleted(question, socket) do
+    filtered_questions = Enum.filter(socket.assigns.questions, &(&1.id != question.id))
+    {:noreply, assign(socket, :questions, filtered_questions)}
   end
 end
