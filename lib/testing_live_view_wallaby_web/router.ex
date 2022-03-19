@@ -53,4 +53,15 @@ defmodule TestingLiveViewWallabyWeb.Router do
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end
+
+  scope "/", TestingLiveViewWallabyWeb do
+    pipe_through :browser
+
+    live "/questions", QuestionLive.Index, :index
+    live "/questions/new", QuestionLive.Index, :new
+    live "/questions/:id/edit", QuestionLive.Index, :edit
+
+    live "/questions/:id", QuestionLive.Show, :show
+    live "/questions/:id/show/edit", QuestionLive.Show, :edit
+  end
 end

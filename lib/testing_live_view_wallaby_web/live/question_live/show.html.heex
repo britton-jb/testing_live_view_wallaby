@@ -1,0 +1,26 @@
+<h1>Show Question</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.question_show_path(@socket, :show, @question)}>
+    <.live_component
+      module={TestingLiveViewWallabyWeb.QuestionLive.FormComponent}
+      id={@question.id}
+      title={@page_title}
+      action={@live_action}
+      question={@question}
+      return_to={Routes.question_show_path(@socket, :show, @question)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Text:</strong>
+    <%= @question.text %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.question_show_path(@socket, :edit, @question), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.question_index_path(@socket, :index) %></span>

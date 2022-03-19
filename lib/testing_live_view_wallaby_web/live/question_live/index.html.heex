@@ -1,0 +1,39 @@
+<h1>Listing Questions</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <.modal return_to={Routes.question_index_path(@socket, :index)}>
+    <.live_component
+      module={TestingLiveViewWallabyWeb.QuestionLive.FormComponent}
+      id={@question.id || :new}
+      title={@page_title}
+      action={@live_action}
+      question={@question}
+      return_to={Routes.question_index_path(@socket, :index)}
+    />
+  </.modal>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Text</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="questions">
+    <%= for question <- @questions do %>
+      <tr id={"question-#{question.id}"}>
+        <td><%= question.text %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.question_show_path(@socket, :show, question) %></span>
+          <span><%= live_patch "Edit", to: Routes.question_index_path(@socket, :edit, question) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: question.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Question", to: Routes.question_index_path(@socket, :new) %></span>
