@@ -16,6 +16,7 @@ defmodule TestingLiveViewWallabyWeb.FeatureCase do
   using do
     quote do
       use Wallaby.Feature
+
       import TestingLiveViewWallabyWeb.FeatureCase
       import Wallaby.Query
 

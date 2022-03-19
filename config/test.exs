@@ -20,7 +20,7 @@ config :testing_live_view_wallaby, TestingLiveViewWallabyWeb.Endpoint,
   secret_key_base: "YZJRcRqYdb9ChAFw+wuLQ2ArKyqYfosHKqg9AaoqDXlarAS8Ny7oSv3PrXwgdYq5",
   server: true
 
-config :testing_live_view_wallaby, :sandbox, Ecto.Adapters.SQL.Sandbox
+config :testing_live_view_wallaby, sql_sandbox: true
 
 config :wallaby,
   otp_app: :testing_live_view_wallaby,

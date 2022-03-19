@@ -1,8 +1,8 @@
 defmodule TestingLiveViewWallabyWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :testing_live_view_wallaby
 
-  if sandbox = Application.get_env(:testing_live_view_wallaby, :sandbox) do
-    plug Phoenix.Ecto.SQL.Sandbox, sandbox: sandbox
+  if Application.get_env(:testing_live_view_wallaby, :sql_sandbox) do
+    plug(Phoenix.Ecto.SQL.Sandbox)
   end
 
   # The session will be stored in the cookie and signed,
@@ -14,41 +14,46 @@ defmodule TestingLiveViewWallabyWeb.Endpoint do
     signing_salt: "ZBn/dqRP"
   ]
 
-  socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
+  socket("/live", Phoenix.LiveView.Socket,
+    websocket: [connect_info: [:user_agent, session: @session_options]]
+  )
 
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phx.digest
   # when deploying your static files in production.
-  plug Plug.Static,
+  plug(Plug.Static,
     at: "/",
     from: :testing_live_view_wallaby,
     gzip: false,
     only: ~w(assets fonts images favicon.ico robots.txt)
+  )
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
-    socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
-    plug Phoenix.LiveReloader
-    plug Phoenix.CodeReloader
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :testing_live_view_wallaby
+    socket("/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket)
+    plug(Phoenix.LiveReloader)
+    plug(Phoenix.CodeReloader)
+    plug(Phoenix.Ecto.CheckRepoStatus, otp_app: :testing_live_view_wallaby)
   end
 
-  plug Phoenix.LiveDashboard.RequestLogger,
+  plug(Phoenix.LiveDashboard.RequestLogger,
     param_key: "request_logger",
     cookie_key: "request_logger"
+  )
 
-  plug Plug.RequestId
-  plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
+  plug(Plug.RequestId)
+  plug(Plug.Telemetry, event_prefix: [:phoenix, :endpoint])
 
-  plug Plug.Parsers,
+  plug(Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
+  )
 
-  plug Plug.MethodOverride
-  plug Plug.Head
-  plug Plug.Session, @session_options
-  plug TestingLiveViewWallabyWeb.Router
+  plug(Plug.MethodOverride)
+  plug(Plug.Head)
+  plug(Plug.Session, @session_options)
+  plug(TestingLiveViewWallabyWeb.Router)
 end
