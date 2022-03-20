@@ -30,6 +30,8 @@ config :wallaby,
     headless: false
   ]
 
+config :mix_test_watch, clear: true
+
 # In test we don't send emails.
 config :testing_live_view_wallaby, TestingLiveViewWallaby.Mailer, adapter: Swoosh.Adapters.Test
 

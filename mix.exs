@@ -10,7 +10,7 @@ defmodule TestingLiveViewWallaby.MixProject do
       compilers: [:gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      preferred_cli_env: [e2e: :test],
+      preferred_cli_env: [e2e: :test, "test.watch": :test],
       deps: deps()
     ]
   end
@@ -50,7 +50,8 @@ defmodule TestingLiveViewWallaby.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:wallaby, "~> 0.29.0", runtime: false, only: :test}
+      {:wallaby, "~> 0.29.0", runtime: false, only: :test},
+      {:mix_test_watch, "~> 1.0", only: :test}
     ]
   end
 
