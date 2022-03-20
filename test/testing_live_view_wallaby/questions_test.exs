@@ -1,5 +1,5 @@
 defmodule TestingLiveViewWallaby.QuestionsTest do
-  use TestingLiveViewWallaby.DataCase
+  use TestingLiveViewWallaby.DataCase, async: true
 
   alias TestingLiveViewWallaby.Questions
 
