@@ -1,6 +1,6 @@
 defmodule TestingLiveViewWallabyWeb.Hooks.AllowEctoSandbox do
   @moduledoc """
-  Because ain't nobody got time to put on_mount in every single mount
+  Because nobody wants to put this test helper on_mount in every single mount
   """
   import Phoenix.LiveView
 

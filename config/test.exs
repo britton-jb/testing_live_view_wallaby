@@ -27,7 +27,7 @@ config :wallaby,
   screenshot_on_failure: true,
   chromedriver: [
     path: "assets/node_modules/chromedriver/bin/chromedriver",
-    headless: false
+    headless: true
   ]
 
 config :mix_test_watch, clear: true
