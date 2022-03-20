@@ -57,7 +57,8 @@ defmodule TestingLiveViewWallabyWeb.QuestionLive.Index do
         end
       end)
 
-    {:noreply, assign(socket, :questions, updated_question_list)}
+    updated_socket = assign(socket, :questions, updated_question_list)
+    {:noreply, push_event(updated_socket, "highlight", %{id: updated_question.id})}
   end
 
   @impl true

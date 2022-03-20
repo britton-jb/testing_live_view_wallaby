@@ -1,5 +1,5 @@
 defmodule TestingLiveViewWallabyWeb.QuestionLiveTest do
-  use TestingLiveViewWallabyWeb.ConnCase
+  use TestingLiveViewWallabyWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
   import TestingLiveViewWallaby.QuestionsFixtures

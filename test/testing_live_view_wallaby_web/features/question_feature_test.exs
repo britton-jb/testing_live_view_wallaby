@@ -40,6 +40,34 @@ defmodule TestingLiveViewWallabyWeb.Features.QuestionFeatureTest do
 
       assert_has(session2, css("#questions > tr > td", text: new_text))
     end
+
+    @sessions 2
+    feature "should update temporarily highlight the updated question for users", %{
+      question: question,
+      sessions: [session1, session2]
+    } do
+      new_text = "Is it highlighted?"
+
+      session2
+      |> visit("/questions")
+      |> assert_has(css("#questions > tr > td", text: question.text))
+
+      session1
+      |> visit("/questions")
+      |> click(link("Edit"))
+      |> fill_in(text_field("Text"), with: new_text)
+      |> click(button("Save"))
+
+      assert session2
+             |> find(css("#questions > tr"))
+             |> Wallaby.Element.attr("style") == "background-color: yellow;"
+
+      Process.sleep(2000)
+
+      assert session2
+             |> find(css("#questions > tr"))
+             |> Wallaby.Element.attr("style") == "background-color: white;"
+    end
   end
 
   describe "live index when deleting a question" do

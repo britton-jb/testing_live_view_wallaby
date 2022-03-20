@@ -1,5 +1,5 @@
 defmodule TestingLiveViewWallabyWeb.PageControllerTest do
-  use TestingLiveViewWallabyWeb.ConnCase
+  use TestingLiveViewWallabyWeb.ConnCase, async: true
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")
