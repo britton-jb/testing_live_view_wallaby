@@ -4,8 +4,8 @@ defmodule TestingLiveViewWallabyWeb.Features.QuestionFeatureTest do
 
   setup [:create_question]
 
-  describe "simple question form" do
-    feature "that users can submit a question", %{session: session} do
+  describe "live index when creating a question" do
+    feature "users should be able to submit the form and create a question", %{session: session} do
       question_text = "How do I test simple things with Wallaby?"
 
       session
@@ -18,11 +18,11 @@ defmodule TestingLiveViewWallabyWeb.Features.QuestionFeatureTest do
     end
   end
 
-  describe "live updating index" do
+  describe "live index when updating a question" do
     # Note - the default generated LiveView doesn't update the index table,
     # but when you click edit, you see the edits.
     @sessions 2
-    feature "that a user updating a question updates it for all users immediately", %{
+    feature "should update a question for all users immediately", %{
       question: question,
       sessions: [session1, session2]
     } do
@@ -39,6 +39,23 @@ defmodule TestingLiveViewWallabyWeb.Features.QuestionFeatureTest do
       |> click(button("Save"))
 
       assert_has(session2, css("#questions > tr > td", text: new_text))
+    end
+  end
+
+  describe "live index when deleting a question" do
+    feature "should prompt the user if they're sure via javascript before deletion", %{
+      session: session,
+      question: question
+    } do
+      confirmation_message =
+        session
+        |> visit("/questions")
+        |> accept_confirm(fn session ->
+          click(session, link("Delete"))
+        end)
+
+      assert confirmation_message == "Are you sure?"
+      refute_has(session, css("#questions > tr > td", text: question.text))
     end
   end
 
