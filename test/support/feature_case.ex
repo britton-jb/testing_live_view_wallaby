@@ -25,6 +25,19 @@ defmodule TestingLiveViewWallabyWeb.FeatureCase do
       @moduletag :e2e
 
       @endpoint TestingLiveViewWallabyWeb.Endpoint
+
+      setup _ do
+        on_exit(fn -> Application.put_env(:wallaby, :js_logger, :stdio) end)
+      end
     end
+  end
+
+  def enable_latency_sim(session, latency) do
+    Application.put_env(:wallaby, :js_logger, nil)
+    Wallaby.Browser.execute_script(session, "liveSocket.enableLatencySim(#{latency})")
+  end
+
+  def disable_latency_sim(session) do
+    Wallaby.Browser.execute_script(session, "liveSocket.disableLatencySim()")
   end
 end

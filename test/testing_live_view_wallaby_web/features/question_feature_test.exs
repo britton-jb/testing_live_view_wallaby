@@ -87,6 +87,22 @@ defmodule TestingLiveViewWallabyWeb.Features.QuestionFeatureTest do
     end
   end
 
+  describe "simulating latency" do
+    feature "should ensure the saving is shown", %{session: session} do
+      html =
+        session
+        |> visit("/questions")
+        |> click(link("New Question"))
+        |> fill_in(text_field("Text"), with: "Latency isn't fun, but should be accounted for")
+        |> enable_latency_sim(2000)
+        |> click(button("Save"))
+        |> find(css("#question-form > div > button"))
+        |> Wallaby.Element.attr("innerHTML")
+
+      assert html == "Saving..."
+    end
+  end
+
   defp create_question(_) do
     question = question_fixture()
     %{question: question}
